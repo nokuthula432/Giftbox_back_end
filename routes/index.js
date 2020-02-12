@@ -1,32 +1,39 @@
-const express = require('express');
-const router = express.Router();
 const mysql = require('mysql');
-const  mysqlConn= require('../conn/conn')
+const express = require('express');
+const app = express();
+var cors = require('cors')
+const mysqlConn= require('../conn/conn');
+const bodyParser = require('body-parser');
+const router = express.Router();
 
 
-router.get('/admin', function(req,res){
+app.use(bodyParser.json());
+app.use(cors());
 
-    const username = req.body.username;
+
+
+
+
+router.post('/add_to_cart', (req, res) => {
+
+    // box id, name and price
+
+    let product = {
+        id: 0002, name: bestgiftbox,
+        price: $21
+    };
+
+    //inserting cart to cart table
     
-    var myQuery = "SELECT * FROM admin WHERE username = ?";
+    mysqlConn.query('insert into cart set ?', [name], (err, results) => {
+        if (err) { 
+            throw err }
 
-    mysqlConn.query(myQuery, [username], function(err, results){
-        if(err){
-            res.send({
-                code: 400,
-                message: err
-            })
-        }
-        else{
-
-            console.log("results")
-            res.send({
-                data: results,
-                code: 200,
-                message: "Successful..."
-            })
+        else {
+            return res.send({ data: results, message: 'holla holla'})
         }
     })
+
 });
 
-module.exports = router ;
+module.exports = router;
