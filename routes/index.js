@@ -10,30 +10,58 @@ const router = express.Router();
 app.use(bodyParser.json());
 app.use(cors());
 
+router.post('/add', (req, res) =>
+{ 
+//   var name = req.body.name;
+//   var qty = req.body.qty ;
+  
+//   var sql="UPDATE menu SET qty = ? WHERE name = ? " ;
+//   connection.query(sql,[qty,name] ,function ( results,fields){  });
+//   connection.query('SELECT name, price, description, qty ,(price * qty) AS TOTAL_PRICE  FROM menu WHERE name = ?',[name], function (err, results,fields)
+//   {
+//   res.send(results)
+//     var price1
+//     price1 = (results[0].price * qty); 
+
+    var post = "INSERT INTO cart  (productId, productName,itemId) VALUES (?,?,?,?)";
+    mysqlConn.query(ipost,[results[0].id,results[0].pName,results[0].itemId],function ( rows,fields,err, result){
+    if(err) {
+    console.log(" Your order was Placed successfully");
+    }else{
+      res.send({status:200});
+         }
+    }) 
+
+})
 
 
 
 
-router.post('/add_to_cart', (req, res) => {
 
-    // box id, name and price
 
-    let product = {
-        id: 0002, name: bestgiftbox,
-        price: $21
-    };
 
-    //inserting cart to cart table
+
+
+
+
+
+router.get('/view', (req, res) => {
+
     
-    mysqlConn.query('insert into cart set ?', [name], (err, results) => {
-        if (err) { 
-            throw err }
 
-        else {
-            return res.send({ data: results, message: 'holla holla'})
-        }
+    var sql = "select * from cart";
+    
+    mysqlConn.query(sql, function (err, result,fields) {
+      if (!err)
+      res.send({data:result})
+      else
+      console.log(err);
+    
+    
     })
-
 });
 
-module.exports = router;
+
+
+
+module.exports = router ;

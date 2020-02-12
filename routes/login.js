@@ -1,7 +1,15 @@
-const express = require('express');
-const router = express.Router();
 const mysql = require('mysql');
+const express = require('express');
 const app = express();
+var cors = require('cors')
+const mysqlConn= require('../conn/conn');
+const bodyParser = require('body-parser');
+const router = express.Router();
+
+
+app.use(bodyParser.json());
+app.use(cors());
+
 
 
 router.post('/login', function(request, response) {
