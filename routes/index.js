@@ -10,58 +10,45 @@ const router = express.Router();
 app.use(bodyParser.json());
 app.use(cors());
 
-router.post('/add', (req, res) =>
-{ 
-//   var name = req.body.name;
-//   var qty = req.body.qty ;
+
+router.post('/update',function(req,res){
+  var name = req.body.name;
+  var qty = req.body.qty ;
+  var total = req.body.total;
+  var price = req.body.price;
+  var quantity = req.body.quantity;
+  var description = req.body.description;
   
-//   var sql="UPDATE menu SET qty = ? WHERE name = ? " ;
-//   connection.query(sql,[qty,name] ,function ( results,fields){  });
-//   connection.query('SELECT name, price, description, qty ,(price * qty) AS TOTAL_PRICE  FROM menu WHERE name = ?',[name], function (err, results,fields)
-//   {
-//   res.send(results)
-//     var price1
-//     price1 = (results[0].price * qty); 
+  //Udate qty
+  var sql="UPDATE cart_det SET qty = ? WHERE name = ? " ;
+  db.query(sql,[qty,name] ,function (err, results,fields){
+      if(!err){
+                  
+                  res.send(results)
+              }else{
+                  console.log(err)
+              }
+   });
+  
+   router.post('/addOrder',function(req,res){
 
-    var post = "INSERT INTO cart  (productId, productName,itemId) VALUES (?,?,?,?)";
-    mysqlConn.query(ipost,[results[0].id,results[0].pName,results[0].itemId],function ( rows,fields,err, result){
-    if(err) {
-    console.log(" Your order was Placed successfully");
-    }else{
-      res.send({status:200});
-         }
-    }) 
+    var name = "SELECT `name`  FROM `cart_det`";
+    var qty = "SELECT `qty`  FROM `cart_det`";
+    var price = "SELECT `price`  FROM `cart_det`";
+    var description = "SELECT `description`  FROM `cart_det`";
 
-})
-
-
-
-
-
-
-
-
-
-
-
-
-router.get('/view', (req, res) => {
-
+//     Add to orders
+   var sqlP =('INSERT INTO `orders`(`name`, `price`, `description`, `qty`) VALUES (?,?,?,?)');
+  db.query(sqlP,[name, price, description, qty] ,function (err, results){
+          if(!err){
+             res.send({data:results});             
     
+          }
+          else{
+            console.log(err);
+          }
+        })   
 
-    var sql = "select * from cart";
-    
-    mysqlConn.query(sql, function (err, result,fields) {
-      if (!err)
-      res.send({data:result})
-      else
-      console.log(err);
-    
-    
-    })
 });
-
-
-
-
-module.exports = router ;
+})
+module.exports = router;
