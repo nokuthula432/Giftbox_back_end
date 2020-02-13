@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const mysql = require('mysql');
+const  db = require('../conn/conn');
 
+router.get('/login',(req,res,next)=>{
+    
+    res.send('login');
+});
 
-
-
-router.get('/info')
 
 module.exports = router ;
