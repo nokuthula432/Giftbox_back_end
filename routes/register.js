@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/',(req,res,next)=>{
+router.get('/register',(req,res,next)=>{
     
-    res.send('Index page');
+    res.send('register');
 });
+
 
 
 module.exports = router ;
