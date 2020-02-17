@@ -14,9 +14,12 @@ router.post('/register', function(req, res){
         "password": req.body.password
     };
 
+    var password = req.body.password;
+    var confirm = req.body.confirm;
+
 
     var email = req.body.email;
-    var myQuery1 = "SELECT * FROM admin WHERE email = ?";
+    var myQuery1 = "SELECT * FROM users WHERE email = ?";
     db.query(myQuery1,[email],function(err,results){
         
         if(results.length > 0){
@@ -28,28 +31,35 @@ router.post('/register', function(req, res){
 
             })
 
-        }else{
-                var myQuery = "INSERT INTO admin SET ?";
-                db.query(myQuery, [post], function(err, results){
-                    if(err){
+        }else if (confirm == password){
+        
+            var myQuery = "INSERT INTO users SET ?";
+            db.query(myQuery, [post], function(err, results){
+                if(err){
+                    
+                    res.send({
+                        data : err,
+                        code : 400,
+                        message : "The was an error !!!"
+                    });
                         
-                        res.send({
-                            data : err,
-                            code : 400,
-                            message : "The was an error !!!"
-                        });
-                            
-                    }else{
-                        
-                        console.log("results")
-                        res.send({
-                            data : results,
-                            code : 200,
-                            message : "Registered Successfully..."
-            
-                        })
-                    }
+                }else{
+                
+                    res.send({
+                        data : results,
+                        code : 200,
+                        message : "Registered Successfully..."
+        
+                    })
+                }
             })
+          
+        }else{
+            res.send({
+                data : err,
+                code : 400,
+                message : "Please confirm password!!!"
+            });
         }
         
     })
