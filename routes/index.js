@@ -4,81 +4,45 @@ const mysql = require('mysql');
 const  mysqlConn= require('../conn/conn');
 const bodyparser = require('body-parser')
 
-//searching for categories
-router.get('/cat', function(req,res){
+//searching  for categories using like % vale % "working"
+router.get('/searchCat', function(req,res){
 
-    //const username = req.body.username;
-    //var myQuery = "SELECT * FROM admin WHERE username = ?";
+    var lastname = req.body.lastname;
+    var myQuery = "SELECT * FROM tbluser WHERE lastname LIKE '%" + lastname + "%' ORDER BY  lastname DESC LIMIT 4";
 
-    const category = req.body.category;
-    var myQuery = "SELECT * FROM tblstudentaccount WHERE fk_studentNumber like '%c%' ";
-
-    mysqlConn.query(myQuery, [category], function(err,results){
+    mysqlConn.query(myQuery,lastname, function(err,results){
         if(err){
-            res.send({
-                code: 400,
-                message: err
-            })
+            res.send(err)
         }
         else{
-
-           console.log("results")
-           res.send({
+            console.log(results)
+             res.send({
                 data: results,
-                code: 200,
-                message: "Successful..."
+                message: "Search - Successful..."
+                
             }) 
-          
         }
     })
 });
 
-//selecting from a dropbox
-router.get('/categories', function(req,res){
+//dropbox search "working"
+router.get('/searchDropbox', function(req,res){
 
-        const category = req.body.category;
+    var lastname = req.body.lastname;
+    var myQuery = "SELECT * FROM tbluser WHERE lastname = ?";
 
-        mysqlConn.query("SELECT * FROM tblstudentaccount WHERE fk_studentNumber = ?",[category],function(err,results){
+    mysqlConn.query(myQuery,lastname, function(err,results){
         if(err){
-            console.log(err);
+            res.send(err)
         }
         else{
-          
-            //return req.send({results})
-            console.log(results);
-            res.send({
+           console.log(results)
+           res.send({
                 data: results,
-                message: "Successful..."
+                message: "DROPBOX successfully...selected the category"
             }) 
-            
         }
-    });
+    })
 });
-
-// delete first option
-router.delete('/than/:id',(req,res)=>{
-    mysqlConn.query('DELETE FROM tbluser WHERE user_id = ?',[req.params.id],(err,rows)=>{
-        if(!err)
-            res.send('Deleted successfully');
-        else
-            console.log(err);
-    }) 
-});
-
-// delete second option
-router.delete('/del',(req,res)=>{
-
-     var user_id = req.body.user_id;
-
-    mysqlConn.query("DELETE FROM tbluser WHERE user_id = ?",[user_id],(err)=>{
-        if(!err)
-            //res.send({results}),
-            res.send('Deleted successfully');
-
-        else
-            console.log(err);
-    }) 
-});
-
 
 module.exports = router;

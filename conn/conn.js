@@ -27,6 +27,4 @@ console.log('db connection failed');
 
 
 });
-
-
 module.exports =mysqlConn;
