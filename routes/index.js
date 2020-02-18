@@ -5,44 +5,21 @@ var cors = require('cors')
 const mysqlConn= require('../conn/conn');
 const bodyParser = require('body-parser');
 const router = express.Router();
+const mysql = require('mysql');
+const  mysqlConn= require('../conn/conn');
+const bodyparser = require('body-parser')
 
-//Update cart qty
-router.post('/update',function(req,res){
-  var name = req.body.name;
-  var qty = req.body.qty;
+//searching for categories
+router.get('/cat', function(req,res){
 
-  //Udate qty
-  var sql="UPDATE cart_det SET qty = ? WHERE name = ? " ;
-  mysqlConn.query(sql,[qty,name] ,function (err, results,fields){
-      if(!err){
-                  
-                  res.send(results)
-              }else{
-                  console.log(err)
-              }
-   });
-  
-})
+    //const username = req.body.username;
+    //var myQuery = "SELECT * FROM admin WHERE username = ?";
 
+    const category = req.body.category;
+    var myQuery = "SELECT * FROM tblstudentaccount WHERE fk_studentNumber like '%c%' ";
 
-//Add to cart
-router.post('/add',function(req,res){
-  
-
-    var post = {
-        "name": req.body.name,
-        "price": req.body.price,
-        "description": req.body.description,
-        "qty": req.body.qty,
-    };
-
-
-    var name = req.body.name;
-    var myQuery1 = "SELECT * FROM cart_det WHERE name = ?";
-    mysqlConn.query(myQuery1,[name],function(err,results){
-        
-        if(results.length > 0){
-
+    mysqlConn.query(myQuery, [category], function(err,results){
+        if(err){
             res.send({
                 data : results,
                 code : 200,
@@ -50,47 +27,64 @@ router.post('/add',function(req,res){
 
             })
 
-        }else{
-                var myQuery = "INSERT INTO cart_det SET ?";
-                mysqlConn.query(myQuery, [post], function(err, results){
-                    if(err){
-                        
-                        return res.send({
-                            data : err,
-                            code : 400,
-                            message : "The was an error !!!"
-                        });
-                            
-                    }else{
-                        
-                        return res.send({
-                            data : results,
-                            code : 200,
-                            message : "Added Cart To Successfully..."
-            
-                        })
-                    }
-            })
+           console.log("results")
+           res.send({
+                data: results,
+                code: 200,
+                message: "Successful..."
+            }) 
+          
         }
         
     })
 });
 
-//Remove cart
-router.delete('/delete/:name',function(req,res){
-  var sQL = 'DELETE FROM cart_det WHERE name= ?';
-  mysqlConn.query(sQL,[req.params.name],(err,rows,fields)=>{
-    if(!err)
-        res.send('Deleted successfully');
-    else
-        console.log(err);
-  })
+//selecting from a dropbox
+router.get('/categories', function(req,res){
+
+        const category = req.body.category;
+
+        mysqlConn.query("SELECT * FROM tblstudentaccount WHERE fk_studentNumber = ?",[category],function(err,results){
+        if(err){
+            console.log(err);
+        }
+        else{
+          
+            //return req.send({results})
+            console.log(results);
+            res.send({
+                data: results,
+                message: "Successful..."
+            }) 
+            
+        }
+    });
 });
 
+// delete first option
+router.delete('/than/:id',(req,res)=>{
+    mysqlConn.query('DELETE FROM tbluser WHERE user_id = ?',[req.params.id],(err,rows)=>{
+        if(!err)
+            res.send('Deleted successfully');
+        else
+            console.log(err);
+    }) 
+});
 
+// delete second option
+router.delete('/del',(req,res)=>{
 
+     var user_id = req.body.user_id;
 
+    mysqlConn.query("DELETE FROM tbluser WHERE user_id = ?",[user_id],(err)=>{
+        if(!err)
+            //res.send({results}),
+            res.send('Deleted successfully');
 
+        else
+            console.log(err);
+    }) 
+});
 
 
 module.exports = router;
