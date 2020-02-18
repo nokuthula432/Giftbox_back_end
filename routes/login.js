@@ -5,15 +5,30 @@ var cors = require('cors')
 const mysqlConn= require('../conn/conn');
 const bodyParser = require('body-parser');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
 
+router.get('/api',(req,res)=>{
 
+	res.json({message:'welcome to the api'});
+  });
 
-router.get('/login',(req,res,next)=>{
-    
-    res.send('login');
-});
+  router.post('/apip',(req,res)=>{
+	res.json({message: 'post created...'});
+   });
 
-app.use(bodyParser.json());
-app.use(cors());
+   router.post('/apiL',(req,res)=>{
+	const user ={
+	  fullName :'zamo', 
+	  email: 'zamo@gmail.com'
+  
+	}
+	jwt.sign({user},'secretkey',(err,token)=>{
+		res.json({
+		  token
+		});
+	  });
+
+	});
+	
 
 module.exports = router ;
