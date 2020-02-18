@@ -2,12 +2,13 @@ const mysql = require('mysql');
 const express = require('express');
 
 
+
 const mysqlConn =mysql.createConnection({
 
   host:'localhost',
   user:'root',
   password:'',
-  database:'GiftBox',
+  database:'giftbox',
   multipleStatements: true
 
 })
