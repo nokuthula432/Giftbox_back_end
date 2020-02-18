@@ -8,11 +8,7 @@ const mysqlConn =mysql.createConnection({
   host:'localhost',
   user:'root',
   password:'',
-<<<<<<< HEAD
   database:'giftbox',
-=======
-  database:'studentportal',
->>>>>>> origin/lindo
   multipleStatements: true
 
 })

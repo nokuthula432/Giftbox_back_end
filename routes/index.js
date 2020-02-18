@@ -3,11 +3,7 @@ const express = require('express');
 const app = express();
 var cors = require('cors')
 const mysqlConn= require('../conn/conn');
-const bodyParser = require('body-parser');
 const router = express.Router();
-const mysql = require('mysql');
-const  mysqlConn= require('../conn/conn');
-const bodyparser = require('body-parser')
 
 //searching for categories
 router.get('/cat', function(req,res){

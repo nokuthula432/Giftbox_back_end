@@ -11,10 +11,10 @@ router.post('/addw',function(req,res){
   
 
     var post = {
-        "name": req.body.name,
-        "price": req.body.price,
-        "description": req.body.description,
-        "qty": req.body.qty,
+        name:req.body.name,
+        price:req.body.price,
+        description:req.body.description,
+        qty:req.body.qty,
     };
 
 
