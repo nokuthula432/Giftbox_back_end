@@ -88,10 +88,4 @@ router.delete('/delete/:cart_id',function(req,res){
   })
 });
 
-
-
-
-
-
-
 module.exports = router;
