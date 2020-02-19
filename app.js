@@ -24,13 +24,14 @@ app.use(function (req, res, next) {
  app.use('/', require('./routes/index'));
  app.use('/', require('./routes/cart'));
  app.use('/', require('./routes/wishlist'));
+ app.use('/', require('./routes/orders'));
 
 
 
 
  
  // start server
-const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : 5000;
+const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 7777) : 5000;
 const server = app.listen(port, function () {
     console.log('Server listening on port ' + port);
 });

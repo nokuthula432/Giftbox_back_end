@@ -1,86 +1,69 @@
-const mysql = require('mysql');
 const express = require('express');
-const app = express();
-var cors = require('cors')
-const mysqlConn= require('../conn/conn');
 const router = express.Router();
+const mysql = require('mysql');
+const  mysqlConn= require('../conn/conn');
+const bodyparser = require('body-parser')
 
-//searching for categories
-router.get('/cat', function(req,res){
+//searching  for categories using like % vale % "working"
+router.get('/search', function(req,res){
 
-    //const username = req.body.username;
-    //var myQuery = "SELECT * FROM admin WHERE username = ?";
+    var product_name = req.body.product_name;
+    var myQuery = "SELECT * FROM product WHERE product_name LIKE '%" + product_name + "%' ORDER BY  product_name DESC LIMIT 4";
 
-    const category = req.body.category;
-    var myQuery = "SELECT * FROM tblstudentaccount WHERE fk_studentNumber like '%c%' ";
-
-    mysqlConn.query(myQuery, [category], function(err,results){
+    mysqlConn.query(myQuery,product_name, function(err,results){
         if(err){
-            res.send({
-                data : results,
-                code : 200,
-                message : "Sorry, item already exist in the cart just add qty!"
-
-            })
-
-           console.log("results")
-           res.send({
-                data: results,
-                code: 200,
-                message: "Successful..."
-            }) 
-          
+            res.send(err)
         }
-        
+        else{
+            console.log(results)
+             res.send({
+                data: results,
+                message: "Search - Successful..."
+                
+            }) 
+        }
     })
 });
 
-//selecting from a dropbox
-router.get('/categories', function(req,res){
+//searching  for categories using like % vale % "working"
+router.get('/searchc', function(req,res){
 
-        const category = req.body.category;
+    var product_category = req.body.product_category;
+    var myQuery = "SELECT * FROM product WHERE product_category LIKE '%" + product_category + "%' ORDER BY  product_category DESC LIMIT 4";
 
-        mysqlConn.query("SELECT * FROM tblstudentaccount WHERE fk_studentNumber = ?",[category],function(err,results){
+    mysqlConn.query(myQuery,product_category, function(err,results){
         if(err){
-            console.log(err);
+            res.send(err)
         }
         else{
-          
-            //return req.send({results})
-            console.log(results);
-            res.send({
+            console.log(results)
+             res.send({
                 data: results,
-                message: "Successful..."
+                message: "Search - Successful..."
+                
             }) 
-            
         }
-    });
+    })
 });
 
-// delete first option
-router.delete('/than/:id',(req,res)=>{
-    mysqlConn.query('DELETE FROM tbluser WHERE user_id = ?',[req.params.id],(err,rows)=>{
-        if(!err)
-            res.send('Deleted successfully');
-        else
-            console.log(err);
-    }) 
+//dropbox search "working"
+router.get('/searchDropbox', function(req,res){
+
+    var product_name = req.body.product_name;
+    var myQuery = "SELECT * FROM product_name WHERE product_name = ?";
+
+    mysqlConn.query(myQuery,product_name, function(err,results){
+        if(err){
+            res.send(err)
+        }
+        else{
+           console.log(results)
+           res.send({
+                data: results,
+                message: "DROPBOX successfully...selected the category"
+            }) 
+        }
+    })
 });
-
-// delete second option
-router.delete('/del',(req,res)=>{
-
-     var user_id = req.body.user_id;
-
-    mysqlConn.query("DELETE FROM tbluser WHERE user_id = ?",[user_id],(err)=>{
-        if(!err)
-            //res.send({results}),
-            res.send('Deleted successfully');
-
-        else
-            console.log(err);
-    }) 
-});
-
 
 module.exports = router;

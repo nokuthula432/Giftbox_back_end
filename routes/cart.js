@@ -8,12 +8,12 @@ const router = express.Router();
 
 //Update cart qty
 router.post('/update',function(req,res){
-  var name = req.body.name;
+  var item_name = req.body.item_name;
   var qty = req.body.qty;
 
   //Udate qty
-  var sql="UPDATE cart_det SET qty = ? WHERE name = ? " ;
-  mysqlConn.query(sql,[qty,name] ,function (err, results,fields){
+  var sql="UPDATE cart SET qty = ? WHERE item_name = ? " ;
+  mysqlConn.query(sql,[qty,item_name] ,function (err, results,fields){
       if(!err){
                   
                   res.send(results)
@@ -30,16 +30,17 @@ router.post('/add',function(req,res){
   
 
     var post = {
-        "name": req.body.name,
+    
+        "item_name": req.body.item_name,
         "price": req.body.price,
         "description": req.body.description,
         "qty": req.body.qty,
     };
 
-
-    var name = req.body.name;
-    var myQuery1 = "SELECT * FROM cart_det WHERE name = ?";
-    mysqlConn.query(myQuery1,[name],function(err,results){
+    // validate product 
+    var item_name = req.body.item_name;
+    var myQuery1 = "SELECT * FROM cart WHERE item_name = ?";
+    mysqlConn.query(myQuery1,[item_name],function(err,results){
         
         if(results.length > 0){
 
@@ -51,7 +52,7 @@ router.post('/add',function(req,res){
             })
 
         }else{
-                var myQuery = "INSERT INTO cart_det SET ?";
+                var myQuery = "INSERT INTO cart SET ?";
                 mysqlConn.query(myQuery, [post], function(err, results){
                     if(err){
                         
@@ -77,9 +78,9 @@ router.post('/add',function(req,res){
 });
 
 //Remove cart
-router.delete('/delete/:name',function(req,res){
-  var sQL = 'DELETE FROM cart_det WHERE name= ?';
-  mysqlConn.query(sQL,[req.params.name],(err,rows,fields)=>{
+router.delete('/delete/:cart_id',function(req,res){
+  var sQL = 'DELETE FROM cart WHERE cart_id = ?';
+  mysqlConn.query(sQL,[req.params.cart_id],(err,rows,fields)=>{
     if(!err)
         res.send('Deleted successfully');
     else
