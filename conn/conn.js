@@ -9,7 +9,13 @@ const mysqlConn =mysql.createConnection({
   user:'root',
   password:'',
   database:'giftbox',
-  multipleStatements: true
+  multipleStatements: true,
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  }
 
 })
 

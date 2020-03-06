@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mysql = require('mysql');
-const  db = require('../conn/conn');
+const mysqlConn= require('../conn/conn');
 
 //Get all sellers
 router.get('/than',(req,res)=>{
@@ -71,5 +71,23 @@ router.put('/than',(req,res)=>{
     })
     
 });
+router.delete('/delUser', function(req,res){
 
+	const id = req.body.id;
+    var myQuery ="DELETE FROM `users` WHERE id = '" + id  +"'";
+   
+    mysqlConn.query(myQuery,id, function(err,results){
+        if(err){
+            res.send(err)
+        }
+        else{
+            console.log(results)
+             res.send({
+                data: results,
+                message: "Delete - Successful...",
+                
+            }) 
+        }
+    })
+});
 module.exports = router ;

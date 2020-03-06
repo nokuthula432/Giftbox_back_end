@@ -4,11 +4,16 @@ const app = express();
 var cors = require('cors');
 const mysqlConn= require('./conn/conn');
 const bodyParser = require('body-parser');
+var session = require('express-session');
 
 
 app.use(bodyParser.json());
 app.use(cors());
-
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
 
 
 app.use(function (req, res, next) {
