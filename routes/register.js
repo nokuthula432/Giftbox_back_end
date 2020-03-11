@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mysql = require('mysql');
-const  db = require('../conn/conn');
+const  mysqlConn= require('../conn/conn');
 
 //register student 
 router.post('/register', function(req, res){  
@@ -20,7 +20,7 @@ router.post('/register', function(req, res){
 
     var email = req.body.email;
     var myQuery1 = "SELECT * FROM users WHERE email = ?";
-    db.query(myQuery1,[email],function(err,results){
+    mysqlConn.query(myQuery1,[email],function(err,results){
         
         if(results.length > 0){
 
@@ -34,7 +34,7 @@ router.post('/register', function(req, res){
         }else if (confirm == password){
         
             var myQuery = "INSERT INTO users SET ?";
-            db.query(myQuery, [post], function(err, results){
+            mysqlConn.query(myQuery, [post], function(err, results){
                 if(err){
                     
                     res.send({

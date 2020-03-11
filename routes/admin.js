@@ -1,18 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const mysql = require('mysql');
-const  db = require('../conn/conn');
+const  mysqlConn= require('../conn/conn');
 const bodyparser = require('body-parser');
 const multer = require('multer');
 const path = require('path');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 const session = require('express-session');
 const flash = require('express-flash');
 
 
 //Get all product
 router.get('/than',(req,res)=>{
-    db.query('SELECT * FROM product',(err,rows,fields)=>{
+    mysqlConn.query('SELECT * FROM product',(err,rows,fields)=>{
         if(!err)
             res.send(rows);
         else
@@ -23,7 +23,7 @@ router.get('/than',(req,res)=>{
 
 //Get a product
 router.get('/thans',(req,res)=>{
-    db.query('SELECT * FROM product WHERE product_category =?',[req.body.product_category],(err,rows,fields)=>{
+    mysqlConn.query('SELECT * FROM product WHERE product_category =?',[req.body.product_category],(err,rows,fields)=>{
         if(!err)
             res.send(rows);
         else
@@ -34,7 +34,7 @@ router.get('/thans',(req,res)=>{
 
 //Delete product
 router.delete('/thand',(req,res)=>{
-    db.query('DELETE FROM product WHERE product_name = ?',[req.body.product_name],(err,rows,fields)=>{
+    mysqlConn.query('DELETE FROM product WHERE product_name = ?',[req.body.product_name],(err,rows,fields)=>{
         if(!err)
             res.send('Deleted successfully');
         else
@@ -46,11 +46,11 @@ router.delete('/thand',(req,res)=>{
 //Insert an product
 
 
-router.post ('/d', function(req,res){
+router.post ('/product', function(req,res){
 
     let name = {product_id:req.body.product_id,product_name:req.body.product_name,product_price:req.body.product_price,product_category:req.body.product_category,product_desc:req.body.product_desc,picture_path:req.body.picture_path}
          
-          db.query("INSERT INTO product set ?",name, function(error, results) {
+    mysqlConn.query("INSERT INTO product set ?",name, function(error, results) {
            if (error) throw error;
     
            else
@@ -63,14 +63,11 @@ router.post ('/d', function(req,res){
 
 //Udate product
     router.put('/updateA', function(req,res){
-   
         var product_price = req.body.product_price;
         var product_name = req.body.product_name;
-      
     
         var myQuery ="UPDATE product SET product_price = '" + product_price+  "' WHERE product_name = '" + product_name + "'";
-    
-        db.query(myQuery,[product_price,product_name], function(err,results){
+        mysqlConn.query(myQuery,[product_price,product_name], function(err,results){
             if(err){
                 res.send(err)
             }
@@ -83,7 +80,7 @@ router.post ('/d', function(req,res){
             }
         })
     });
-    //searching  for categories using like % value % "working admin search (just changes of variables)"
+//searching  for categories using like % value % "working admin search (just changes of variables)"
 router.get('/searchCat', function(req,res){
 
     var lastname = req.body.lastname;
@@ -180,8 +177,6 @@ router.get('/download', function(req,res,next){
 
      filepath = path.join(__dirname,'./upload/')+req.body.file;
      return res.sendFile(filepath);
-})
-
-
+});
 
 module.exports = router ;

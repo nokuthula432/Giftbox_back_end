@@ -59,19 +59,12 @@ router.post('/addw',function(req,res){
 
 //Remove cart
 router.delete('/delete/:name',function(req,res){
-  var sQL = 'DELETE FROM cart_det WHERE name= ?';
-  mysqlConn.query(sQL,[req.params.name],(err,rows,fields)=>{
+  var myQuery = 'DELETE FROM cart_det WHERE name= ?';
+  mysqlConn.query(myQuery,[req.params.name],(err,rows,fields)=>{
     if(!err)
         res.send('Deleted successfully');
     else
         console.log(err);
   })
 });
-
-
-
-
-
-
-
 module.exports = router;
