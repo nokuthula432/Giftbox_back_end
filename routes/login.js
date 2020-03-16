@@ -9,20 +9,17 @@ const bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({extended : true}));
 router.use(bodyParser.json());
 
-router.post('/login', function(req, res,error) {
-	// let username = req.body.username;
-	// let password = req.body.password;
-    // var role = req.body.role;
-    let username = "lindo";
-	let password = "12345678";
-	var role = 1;
+router.post('/login', function(req, res) {
 	
+	let username = req.body.username;
+	var password = req.body.password;
+    var role = req.body.role;
 
 	if (!username || !password ){
-		res.send({ msg: 'Please enter all fields' });
+		res.send('Please enter all fields' );
 	}
 	if (password.length < 6) {
-		res.send({ msg: 'Password must be at least 6 characters' });
+		res.send('Password must be at least 6 characters');
 	  }
 	if ( username && password) 
 	{
@@ -35,8 +32,9 @@ router.post('/login', function(req, res,error) {
 					res.json({
 						token,
 					 username:results
-					});
-                  });
+					})
+				  })
+				//   res.send('logged in as a client');
 			} 
 			else {
 				res.send('Incorrect  username and/or password..client.!');
@@ -51,10 +49,9 @@ router.post('/login', function(req, res,error) {
 						res.json({
 							token,
 						 username:results
-						});
-                      });
-                      res.send('logged in as a admin');
-
+						})
+                      })
+                    //   res.send('logged in as a admin');
 				} else {
 					res.send('Incorrect  username and/or password..admin.!');
 					res.end();
