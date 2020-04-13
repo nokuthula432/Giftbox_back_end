@@ -71,8 +71,8 @@ router.delete('/delCat', function(req,res){
     })
 });
 
-//second option for deleting  if problems occur on the first option
-router.delete('/than/:id',(req,res)=>{
+//deleting a user by id , a single user
+router.delete('/user/:id',(req,res)=>{
     mysqlConn.query('DELETE FROM tbluser WHERE user_id = ?',[req.params.id],(err,rows)=>{
         if(!err)
             res.send('Deleted successfully');
@@ -155,9 +155,7 @@ router.post('/upload2',upload.single('document'),(req,res)=>{
     } ;
 });
 
-//retrieving the path from the database and getting the picture
-
-
+//retrieving the path from the database and getting(display) the picture
 router.get('/download', function(req,res,next){
 
      filepath = path.join(__dirname,'./upload/')+req.body.file;
