@@ -44,5 +44,23 @@ router.get('/searchDropbox', function(req,res){
         }
     })
 });
+router.get('/getWish', function(req,res){
 
+    var cust_num = req.body.cust_num;
+    var myQuery = "SELECT * FROM wishlist WHERE cust_num = ? ";
+
+    mysqlConn.query(myQuery,cust_num, function(err,results){
+        if(err){
+            res.send("wish selection ,not successful")
+        }
+        else{
+            console.log(results)
+             res.send({
+                data: results,
+                message: "wish selection  - Successful..."
+                
+            }) 
+        }
+    })
+});
 module.exports = router;
